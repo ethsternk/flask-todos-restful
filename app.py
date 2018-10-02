@@ -23,10 +23,7 @@ class TodoResource(Resource):
         for t in todos:
             if t.get('id') == int(id):
                 todo_index = todos.index(t)
-        todos[todo_index] = {
-            'id': todos[todo_index]['id'],
-            'name': data.get('name', None)
-        }
+        todos[todo_index].update(data)
         return todos[todo_index]
 
     def delete(self, id):
