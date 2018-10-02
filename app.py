@@ -1,6 +1,7 @@
 # /usr/bin/env python
 from flask import Flask, request
 from flask_restful import Resource, Api
+import time
 
 app = Flask(__name__)
 api = Api(app)
@@ -20,10 +21,18 @@ class TodoResource(Resource):
         data = request.get_json()
         global todos
         todo_index = 0
+        current_time = time.time()
         for t in todos:
             if t.get('id') == int(id):
                 todo_index = todos.index(t)
         todos[todo_index].update(data)
+        todos[todo_index].update({
+            'last_updated_at': current_time
+        })
+        if data.get('completed', False):
+            todos[todo_index].update({
+                'completed_at': current_time
+            })
         return todos[todo_index]
 
     def delete(self, id):
@@ -41,11 +50,17 @@ class TodoListResource(Resource):
         return todos
 
     def post(self):
+        global todos
         global latest_id
         data = request.get_json()
         todo = {
             'id': latest_id + 1,
-            'name': data.get('name', None)
+            'name': data.get('name', None),
+            'created_at': time.time(),
+            'last_updated_at': None,
+            'due_date': data.get('due_date', None),
+            'completed': data.get('completed', False),
+            'completed_at': data.get('completed_at', None)
         }
         todos.append(todo)
         latest_id += 1
