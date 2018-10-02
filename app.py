@@ -18,8 +18,16 @@ class TodoResource(Resource):
 
     def put(self, id):
         data = request.get_json()
-        name = data.get('name', None)
-        return {'eventually': 'Update a todo id: %s, name: %s' % (id, name)}
+        global todos
+        todo_index = 0
+        for t in todos:
+            if t.get('id') == int(id):
+                todo_index = todos.index(t)
+        todos[todo_index] = {
+            'id': todos[todo_index]['id'],
+            'name': data.get('name', None)
+        }
+        return todos[todo_index]
 
     def delete(self, id):
         global todos
