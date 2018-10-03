@@ -1,4 +1,10 @@
 # /usr/bin/env python
+
+"""
+    Main Python file for the API, checks endpoints and
+    returns the appropriate data to the user.
+"""
+
 from flask import Flask, request
 from flask_restful import Resource, Api
 import time
@@ -12,6 +18,9 @@ latest_id = 0
 
 class TodoResource(Resource):
     def get(self, id):
+        """
+            Retrieves a todo based on ID.
+        """
 
         # return first id match in todos
         for t in todos:
@@ -22,6 +31,9 @@ class TodoResource(Resource):
         return {'error': 'No todo with id %s' % (id)}
 
     def put(self, id):
+        """
+            Edits a todo based on ID and provided user data.
+        """
 
         global todos
         data = request.get_json()
@@ -50,6 +62,9 @@ class TodoResource(Resource):
         return todos[todo_index]
 
     def delete(self, id):
+        """
+            Deletes a todo based on ID.
+        """
 
         global todos
 
@@ -67,9 +82,17 @@ class TodoResource(Resource):
 
 class TodoListResource(Resource):
     def get(self):
+        """
+            Returns a list of all todos.
+        """
         return todos
 
     def post(self):
+        """
+            Creates a new todo based off provided user data. A unique ID
+            and certain timestamps are automatically assigned.
+        """
+
         global todos
         global latest_id
         data = request.get_json()
