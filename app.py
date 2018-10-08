@@ -19,7 +19,8 @@ formatter = logging.Formatter(
     '%(asctime)s : %(levelname)s : %(filename)s : %(message)s')
 LOGFILE = "./todos.log"
 handler = RotatingFileHandler(
-    LOGFILE, mode='a', maxBytes=2000, backupCount=2, encoding=None, delay=0)
+    LOGFILE, mode='a', maxBytes=5*1024*1024,
+    backupCount=2, encoding=None, delay=0)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
